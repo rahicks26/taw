@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/.paket/">
+    <File Path="paket.dependencies" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Tav.Core/Tav.Core.fsproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Tav.Core.Tests/Tav.Core.Tests.fsproj" />
+  </Folder>
+</Solution>
