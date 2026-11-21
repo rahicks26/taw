@@ -65,11 +65,3 @@ This will by default fail on any linting error and restore all local tools.
 ## Contributions
 
 At this time I am not taking any contributions to the project. The activity is largely to grapple with the beauty and complexity of Biblical Hebrew for my own growth in both the F# and Hebrew.
-
-## License and Usage
-
-I have not decided on licensing yet, but if you choose to use any of this software it is at your own risk. No promises or grantees are made at this time around correctness or completeness. However, it is my express desire that if any of this solution is used for in a commercial product a Pull Request be opened with a request for usage added. Once the Pull Request is approved it may be used.
-
-All request for usage should be included in `./request_for_usage` and follow the template `./request_for_usage/template.md`. If you have any questions about this please open an issue.
-
-This section (License and Usage) will be superseded once a license is selected.
