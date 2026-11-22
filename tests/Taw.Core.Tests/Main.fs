@@ -1,4 +1,4 @@
-﻿module Tav.Core.Tests.Program
+﻿module Taw.Core.Tests.Program
 
 open Expecto
 

@@ -10,7 +10,7 @@
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Tav.Core\Tav.Core.fsproj" />
+    <ProjectReference Include="..\..\src\Taw.Core\Taw.Core.fsproj" />
   </ItemGroup>
   <Import Project="..\..\.paket\Paket.Restore.targets" />
 </Project>
