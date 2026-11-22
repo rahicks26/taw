@@ -16,6 +16,7 @@ type Chapter = private | Chapter of int
 [<Struct>]
 type VerseNumber = private | VerseNumber of int
 
+[<RequireQualifiedAccess>]
 module BookName =
     let books =
         set
@@ -77,6 +78,7 @@ module BookName =
 
     let value (BookName str) = str
 
+[<RequireQualifiedAccess>]
 module Chapter =
     let max_chapter = 150
     let min_chapter = 0
@@ -94,6 +96,7 @@ module Chapter =
 
     let value (Chapter num) = num
 
+[<RequireQualifiedAccess>]
 module VerseNumber =
     let max_verse_number = 176
     let min_verse_number = 1
