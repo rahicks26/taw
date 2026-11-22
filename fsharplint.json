@@ -1,6 +1,10 @@
 {
     "ignoreFiles": [
-        "assemblyinfo.*"
+        "assemblyinfo.*",
+        "bin/",
+        "obj/",
+        "**/bin/",
+        "**/obj/"
     ],
     "global": {
         "numIndentationSpaces": 4
@@ -54,15 +58,15 @@
         "enabled": true
     },
     "nestedStatements": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "depth": 8
+            "depth": 7
         }
     },
     "cyclomaticComplexity": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "maxComplexity": 40
+            "maxComplexity": 10
         }
     },
     "reimplementsFunction": {
@@ -111,21 +115,21 @@
         }
     },
     "maxLinesInValue": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "maxLines": 100
         }
     },
     "maxLinesInFunction": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "maxLines": 100
+            "maxLines": 30
         }
     },
     "maxLinesInMember": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "maxLines": 100
+            "maxLines": 30
         }
     },
     "maxLinesInConstructor": {
@@ -141,27 +145,27 @@
         }
     },
     "maxLinesInModule": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "maxLines": 1000
         }
     },
     "maxLinesInRecord": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "maxLines": 500
+            "maxLines": 20
         }
     },
     "maxLinesInEnum": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "maxLines": 500
+            "maxLines": 10
         }
     },
     "maxLinesInUnion": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "maxLines": 500
+            "maxLines": 10
         }
     },
     "maxLinesInClass": {
@@ -292,37 +296,37 @@
     "unnestedFunctionNames": {
         "enabled": false,
         "config": {
-            "naming": "PascalCase",
+            "naming": "CamelCase",
             "underscores": "None"
         }
     },
     "nestedFunctionNames": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "naming": "CamelCase",
             "underscores": "None"
         }
     },
     "maxNumberOfItemsInTuple": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "maxItems": 4
+            "maxItems": 3
         }
     },
     "maxNumberOfFunctionParameters": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "maxItems": 5
+            "maxItems": 7
         }
     },
     "maxNumberOfMembers": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "maxItems": 32
         }
     },
     "maxNumberOfBooleanOperatorsInCondition": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "maxItems": 4
         }
@@ -373,7 +377,7 @@
         "enabled": false
     },
     "maxCharactersOnLine": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "maxCharactersOnLine": 120
         }
@@ -387,9 +391,9 @@
         }
     },
     "maxLinesInFile": {
-        "enabled": false,
+        "enabled": true,
         "config": {
-            "maxLinesInFile": 1000
+            "maxLinesInFile": 500
         }
     },
     "trailingNewLineInFile": {
@@ -430,10 +434,10 @@
         "enabled": false
     },
     "disallowShadowing": {
-        "enabled": false
+        "enabled": true
     },
     "discourageStringInterpolationWithStringFormat": {
-        "enabled": false
+        "enabled": true
     },
     "favourNamedMembers": {
         "enabled": false
@@ -448,7 +452,7 @@
         }
     },
     "simpleAsyncComplementaryHelpers": {
-        "enabled": false,
+        "enabled": true,
         "config": {
             "mode": "OnlyPublicAPIsInLibraries"
         }

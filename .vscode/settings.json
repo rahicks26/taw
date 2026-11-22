@@ -1,0 +1,10 @@
+{
+    "editor.formatOnSave": true,
+    "notebook.formatOnSave.enabled": true,
+    "FSharp.linter": true,
+    "FSharp.inlineValues.enabled": false,
+    "FSharp.showExplorerOnStartup": true,
+    "editor.defaultFormatter": "Ionide.Ionide-fsharp",
+    "FSharp.inlayHints.parameterNames": false,
+    "FSharp.inlayHints.typeAnnotations": false
+}
