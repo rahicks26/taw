@@ -1,4 +1,5 @@
-﻿module Tav.Core.Tests
+﻿module Tav.Core.Tests.Program
+
 open Expecto
 
 [<EntryPoint>]

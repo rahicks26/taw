@@ -6,6 +6,7 @@
     <GenerateProgramFile>false</GenerateProgramFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Bible.SimpleTypes.Spec.fs" />
     <Compile Include="Main.fs" />
   </ItemGroup>
   <ItemGroup>
