@@ -14,9 +14,9 @@ let tests =
                     testCase "create should return an error when null"
                     <| fun () ->
                         let bibleName = null
-                        let expected = bibleName |> InvalidBookName |> Error
+                        let expected = bibleName |> Bible.InvalidBook |> Error
 
-                        let result = BookName.create bibleName
+                        let result = Bible.Book.create bibleName
 
                         Expect.isError result "Null is not valid."
                         Expect.equal result expected "Should be an invalid book name."
@@ -24,9 +24,9 @@ let tests =
                     testCase "create should return an error when empty"
                     <| fun () ->
                         let bibleName = ""
-                        let expected = bibleName |> InvalidBookName |> Error
+                        let expected = bibleName |> Bible.InvalidBook |> Error
 
-                        let result = BookName.create bibleName
+                        let result = Bible.Book.create bibleName
 
                         Expect.isError result "Empty is not valid."
                         Expect.equal result expected "Should be an invalid book name."
@@ -34,25 +34,25 @@ let tests =
                     testCase "create should return an error when name is not in known book names"
                     <| fun () ->
                         let bibleName = "mark" // Not an OT Bible Book
-                        let expected = bibleName |> InvalidBookName |> Error
+                        let expected = bibleName |> Bible.InvalidBook |> Error
 
-                        let result = BookName.create bibleName
+                        let result = Bible.Book.create bibleName
 
                         Expect.isError result "Mark is not valid."
                         Expect.equal result expected "Should be an invalid book name."
 
                     testCase "create should return valid names for OT books"
                     <| fun () ->
-                        let bibleNames = BookName.books |> Set.toList // Not an OT Bible Book
+                        let bibleNames = Bible.Book.all_books |> Set.toList // Not an OT Bible Book
 
                         let valueIsLower =
                             function
                             | Ok n ->
-                                let str = n |> BookName.value
+                                let str = n |> Bible.Book.value
                                 str = str.ToLower ()
                             | Error _ -> false
 
-                        let result = bibleNames |> List.map BookName.create
+                        let result = bibleNames |> List.map Bible.Book.create
 
                         Expect.all result Result.isOk "All OT Bible names should return ok"
                         Expect.all result valueIsLower "Value should be lower"
@@ -62,29 +62,29 @@ let tests =
                 [
                     testCase "create should return an error if below minimum"
                     <| fun () ->
-                        let chapter = Chapter.min_chapter - 1
-                        let expected = chapter |> InvalidChapter |> Error
+                        let chapter = Bible.Chapter.min_chapter - 1
+                        let expected = chapter |> Bible.InvalidChapter |> Error
 
-                        let actual = Chapter.create chapter
+                        let actual = Bible.Chapter.create chapter
 
                         Expect.isError actual "Should be an invalid chapter."
                         Expect.equal actual expected "Should be an invalid chapter."
 
                     testCase "create should return an error if above the maximum"
                     <| fun () ->
-                        let chapter = Chapter.max_chapter + 1
-                        let expected = chapter |> InvalidChapter |> Error
+                        let chapter = Bible.Chapter.max_chapter + 1
+                        let expected = chapter |> Bible.InvalidChapter |> Error
 
-                        let actual = Chapter.create chapter
+                        let actual = Bible.Chapter.create chapter
 
                         Expect.isError actual "Should be an invalid chapter."
                         Expect.equal actual expected "Should be an invalid chapter."
 
                     testCase "create should return a valid chapter when between or equal to min or max"
                     <| fun () ->
-                        let chapters = [ Chapter.min_chapter ; Chapter.max_chapter ; 75 ]
+                        let chapters = [ Bible.Chapter.min_chapter ; Bible.Chapter.max_chapter ; 75 ]
 
-                        let actual = chapters |> List.map Chapter.create
+                        let actual = chapters |> List.map Bible.Chapter.create
 
                         Expect.all actual Result.isOk "Valid chapters should return ok"
                 ]
@@ -93,20 +93,20 @@ let tests =
                 [
                     testCase "create should return an error if below minimum"
                     <| fun () ->
-                        let verse_number = VerseNumber.min_verse_number - 1
-                        let expected = verse_number |> InvalidVerseNumber |> Error
+                        let verse_number = Bible.VerseNumber.min_verse_number - 1
+                        let expected = verse_number |> Bible.InvalidVerseNumber |> Error
 
-                        let actual = VerseNumber.create verse_number
+                        let actual = Bible.VerseNumber.create verse_number
 
                         Expect.isError actual "Should be an invalid verse number."
                         Expect.equal actual expected "Should be an invalid verse number."
 
                     testCase "create should return an error if above the maximum"
                     <| fun () ->
-                        let verse_number = VerseNumber.max_verse_number + 1
-                        let expected = verse_number |> InvalidVerseNumber |> Error
+                        let verse_number = Bible.VerseNumber.max_verse_number + 1
+                        let expected = verse_number |> Bible.InvalidVerseNumber |> Error
 
-                        let actual = VerseNumber.create verse_number
+                        let actual = Bible.VerseNumber.create verse_number
 
                         Expect.isError actual "Should be an invalid verse number."
                         Expect.equal actual expected "Should be an invalid verse number."
@@ -114,9 +114,9 @@ let tests =
                     testCase "create should return a valid chapter when between or equal to min or max"
                     <| fun () ->
                         let verse_numbers =
-                            [ VerseNumber.min_verse_number ; VerseNumber.min_verse_number ; 26 ]
+                            [ Bible.VerseNumber.min_verse_number ; Bible.VerseNumber.min_verse_number ; 26 ]
 
-                        let actual = verse_numbers |> List.map VerseNumber.create
+                        let actual = verse_numbers |> List.map Bible.VerseNumber.create
 
                         Expect.all actual Result.isOk "Valid verse numbers should return ok"
                 ]
