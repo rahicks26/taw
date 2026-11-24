@@ -14,7 +14,7 @@ let tests =
                     testCase "parse should return an error when null"
                     <| fun () ->
                         let bibleName = null
-                        let expected = bibleName |> Bible.InvalidBook |> Error
+                        let expected = bibleName |> Bible.BookIsNotKnown |> Error
 
                         let result = Bible.Book.parse bibleName
 
@@ -24,7 +24,7 @@ let tests =
                     testCase "parse should return an error when empty"
                     <| fun () ->
                         let bibleName = ""
-                        let expected = bibleName |> Bible.InvalidBook |> Error
+                        let expected = bibleName |> Bible.BookIsNotKnown |> Error
 
                         let result = Bible.Book.parse bibleName
 
@@ -34,7 +34,7 @@ let tests =
                     testCase "parse should return an error when name is not in known book names"
                     <| fun () ->
                         let bibleName = "mark" // Not an OT Bible Book
-                        let expected = bibleName |> Bible.InvalidBook |> Error
+                        let expected = bibleName |> Bible.BookIsNotKnown |> Error
 
                         let result = Bible.Book.parse bibleName
 
@@ -63,7 +63,7 @@ let tests =
                     testCase "parse should return an error if below minimum"
                     <| fun () ->
                         let chapter = Bible.Chapter.min - 1
-                        let expected = chapter |> Bible.InvalidChapter |> Error
+                        let expected = chapter |> Bible.ChapterIsOutOfRange |> Error
 
                         let actual = Bible.Chapter.parse chapter
 
@@ -73,7 +73,7 @@ let tests =
                     testCase "parse should return an error if above the maximum"
                     <| fun () ->
                         let chapter = Bible.Chapter.max + 1
-                        let expected = chapter |> Bible.InvalidChapter |> Error
+                        let expected = chapter |> Bible.ChapterIsOutOfRange |> Error
 
                         let actual = Bible.Chapter.parse chapter
 
@@ -94,7 +94,7 @@ let tests =
                     testCase "parse should return an error if null"
                     <| fun () ->
                         let text = null
-                        let expected = text |> Bible.InvalidText |> Error
+                        let expected = Bible.TextIsEmptyOrNull |> Error
 
                         let actual = Bible.Text.parse text
 
@@ -104,7 +104,7 @@ let tests =
                     testCase "parse should return an error if empty"
                     <| fun () ->
                         let text = ""
-                        let expected = text |> Bible.InvalidText |> Error
+                        let expected = Bible.TextIsEmptyOrNull |> Error
 
                         let actual = Bible.Text.parse text
 
@@ -125,7 +125,7 @@ let tests =
                     testCase "parse should return an error if below minimum"
                     <| fun () ->
                         let verse_number = Bible.VerseNumber.min - 1
-                        let expected = verse_number |> Bible.InvalidVerseNumber |> Error
+                        let expected = verse_number |> Bible.VerseNumberIsOutOfRange |> Error
 
                         let actual = Bible.VerseNumber.parse verse_number
 
@@ -135,7 +135,7 @@ let tests =
                     testCase "parse should return an error if above the maximum"
                     <| fun () ->
                         let verse_number = Bible.VerseNumber.max + 1
-                        let expected = verse_number |> Bible.InvalidVerseNumber |> Error
+                        let expected = verse_number |> Bible.VerseNumberIsOutOfRange |> Error
 
                         let actual = Bible.VerseNumber.parse verse_number
 
@@ -149,5 +149,47 @@ let tests =
                         let actual = verse_numbers |> List.map Bible.VerseNumber.parse
 
                         Expect.all actual Result.isOk "Valid verse numbers should return ok"
+                ]
+            testList
+                "Bible.Version"
+                [
+                    testCase "parse should return an error if null"
+                    <| fun () ->
+                        let version = null
+                        let expected = Bible.VersionIsEmptyOrNull |> Error
+
+                        let actual = Bible.Version.parse version
+
+                        Expect.isError actual "Should be an invalid version."
+                        Expect.equal actual expected "Should be an invalid version."
+
+                    testCase "parse should return an error if empty"
+                    <| fun () ->
+                        let version = ""
+                        let expected = Bible.VersionIsEmptyOrNull |> Error
+
+                        let actual = Bible.Version.parse version
+
+                        Expect.isError actual "Should be an invalid version."
+                        Expect.equal actual expected "Should be an invalid version."
+
+                    testCase "parse should return an error if more then 100 characters long"
+                    <| fun () ->
+                        // A simple string that is more than long 100 ;)
+                        let version = [ 1..101 ] |> List.map (fun n -> n.ToString ()) |> String.concat ""
+                        let expected = version |> Bible.VersionIsTooLong |> Error
+
+                        let actual = Bible.Version.parse version
+
+                        Expect.isError actual "Should be an invalid version."
+                        Expect.equal actual expected "Should be an invalid version."
+
+                    testCase "parse should return a valid chapter when not empty or null"
+                    <| fun () ->
+                        let version = "CSB"
+
+                        let actual = Bible.Version.parse version
+
+                        Expect.isOk actual "Should be an valid version."
                 ]
         ]

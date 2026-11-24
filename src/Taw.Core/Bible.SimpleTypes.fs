@@ -7,10 +7,13 @@ open FsToolkit.ErrorHandling
 module Bible =
 
     type Error =
-        | InvalidBook of string
-        | InvalidChapter of int
-        | InvalidText of string
-        | InvalidVerseNumber of int
+        | BookIsNotKnown of string
+        | ChapterIsOutOfRange of int
+        | TextIsEmptyOrNull
+        | VerseNumberIsOutOfRange of int
+        | VersionIsEmptyOrNull
+        | VersionIsTooLong of string
+
 
     [<Struct>]
     type Book =
@@ -69,7 +72,7 @@ module Bible =
             |> Option.filter (String.IsNullOrWhiteSpace >> not)
             |> Option.map (fun str -> str.ToLower ())
             |> Option.filter bookWasFound
-            |> Result.requireSomeWith (fun () -> str |> InvalidBook)
+            |> Result.requireSomeWith (fun () -> str |> BookIsNotKnown)
             |> Result.map Book
 
         static member value (Book str) = str
@@ -86,7 +89,7 @@ module Bible =
             if Chapter.min <= num && num <= Chapter.max then
                 num |> Chapter |> Ok
             else
-                num |> InvalidChapter |> Error
+                num |> ChapterIsOutOfRange |> Error
 
         static member value (Chapter num) = num
 
@@ -97,7 +100,7 @@ module Bible =
 
         static member parse str =
             match str with
-            | str when String.IsNullOrWhiteSpace str -> str |> InvalidText |> Error
+            | str when String.IsNullOrWhiteSpace str -> TextIsEmptyOrNull |> Error
             | str -> str |> Text |> Ok
 
         static member value (Text str) = str
@@ -114,4 +117,17 @@ module Bible =
             if VerseNumber.min <= num && num <= VerseNumber.max then
                 num |> VerseNumber |> Ok
             else
-                num |> InvalidVerseNumber |> Error
+                num |> VerseNumberIsOutOfRange |> Error
+
+    [<Struct>]
+    type Version =
+        private
+        | Version of string
+
+        static member parse str =
+            match str with
+            | str when String.IsNullOrWhiteSpace str -> VersionIsEmptyOrNull |> Error
+            | str when str.Length > 100 -> str |> VersionIsTooLong |> Error
+            | str -> str |> Version |> Ok
+
+        static member value (Version str) = str
