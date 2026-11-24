@@ -1,4 +1,4 @@
-﻿module Taw.Bible.SimpleTypes
+﻿module Taw.Core.Bible.SimpleTypes
 
 open System
 

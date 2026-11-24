@@ -1,7 +1,7 @@
 module Taw.Core.Tests.Bible.SimpleTypes.Spec
 
 open Expecto
-open Taw.Bible.SimpleTypes
+open Taw.Core.Bible.SimpleTypes
 
 [<Tests>]
 let tests =
