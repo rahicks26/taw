@@ -9,41 +9,41 @@ let tests =
         "Bible.SimpleTypes"
         [
             testList
-                "BookName"
+                "Bible.Book"
                 [
-                    testCase "create should return an error when null"
+                    testCase "parse should return an error when null"
                     <| fun () ->
                         let bibleName = null
                         let expected = bibleName |> Bible.InvalidBook |> Error
 
-                        let result = Bible.Book.create bibleName
+                        let result = Bible.Book.parse bibleName
 
                         Expect.isError result "Null is not valid."
                         Expect.equal result expected "Should be an invalid book name."
 
-                    testCase "create should return an error when empty"
+                    testCase "parse should return an error when empty"
                     <| fun () ->
                         let bibleName = ""
                         let expected = bibleName |> Bible.InvalidBook |> Error
 
-                        let result = Bible.Book.create bibleName
+                        let result = Bible.Book.parse bibleName
 
                         Expect.isError result "Empty is not valid."
                         Expect.equal result expected "Should be an invalid book name."
 
-                    testCase "create should return an error when name is not in known book names"
+                    testCase "parse should return an error when name is not in known book names"
                     <| fun () ->
                         let bibleName = "mark" // Not an OT Bible Book
                         let expected = bibleName |> Bible.InvalidBook |> Error
 
-                        let result = Bible.Book.create bibleName
+                        let result = Bible.Book.parse bibleName
 
                         Expect.isError result "Mark is not valid."
                         Expect.equal result expected "Should be an invalid book name."
 
-                    testCase "create should return valid names for OT books"
+                    testCase "parse should return valid names for OT books"
                     <| fun () ->
-                        let bibleNames = Bible.Book.all_books |> Set.toList // Not an OT Bible Book
+                        let bibleNames = Bible.Book.canonical_books |> Set.toList // Not an OT Bible Book
 
                         let valueIsLower =
                             function
@@ -52,71 +52,101 @@ let tests =
                                 str = str.ToLower ()
                             | Error _ -> false
 
-                        let result = bibleNames |> List.map Bible.Book.create
+                        let result = bibleNames |> List.map Bible.Book.parse
 
                         Expect.all result Result.isOk "All OT Bible names should return ok"
                         Expect.all result valueIsLower "Value should be lower"
                 ]
             testList
-                "Chapter"
+                "Bible.Chapter"
                 [
-                    testCase "create should return an error if below minimum"
+                    testCase "parse should return an error if below minimum"
                     <| fun () ->
-                        let chapter = Bible.Chapter.min_chapter - 1
+                        let chapter = Bible.Chapter.min - 1
                         let expected = chapter |> Bible.InvalidChapter |> Error
 
-                        let actual = Bible.Chapter.create chapter
+                        let actual = Bible.Chapter.parse chapter
 
                         Expect.isError actual "Should be an invalid chapter."
                         Expect.equal actual expected "Should be an invalid chapter."
 
-                    testCase "create should return an error if above the maximum"
+                    testCase "parse should return an error if above the maximum"
                     <| fun () ->
-                        let chapter = Bible.Chapter.max_chapter + 1
+                        let chapter = Bible.Chapter.max + 1
                         let expected = chapter |> Bible.InvalidChapter |> Error
 
-                        let actual = Bible.Chapter.create chapter
+                        let actual = Bible.Chapter.parse chapter
 
                         Expect.isError actual "Should be an invalid chapter."
                         Expect.equal actual expected "Should be an invalid chapter."
 
-                    testCase "create should return a valid chapter when between or equal to min or max"
+                    testCase "parse should return a valid chapter when between or equal to min or max"
                     <| fun () ->
-                        let chapters = [ Bible.Chapter.min_chapter ; Bible.Chapter.max_chapter ; 75 ]
+                        let chapters = [ Bible.Chapter.min ; Bible.Chapter.max ; 75 ]
 
-                        let actual = chapters |> List.map Bible.Chapter.create
+                        let actual = chapters |> List.map Bible.Chapter.parse
 
                         Expect.all actual Result.isOk "Valid chapters should return ok"
                 ]
             testList
-                "VerseNumber"
+                "Bible.Text"
                 [
-                    testCase "create should return an error if below minimum"
+                    testCase "parse should return an error if null"
                     <| fun () ->
-                        let verse_number = Bible.VerseNumber.min_verse_number - 1
+                        let text = null
+                        let expected = text |> Bible.InvalidText |> Error
+
+                        let actual = Bible.Text.parse text
+
+                        Expect.isError actual "Should be an invalid text."
+                        Expect.equal actual expected "Should be an invalid text."
+
+                    testCase "parse should return an error if empty"
+                    <| fun () ->
+                        let text = ""
+                        let expected = text |> Bible.InvalidText |> Error
+
+                        let actual = Bible.Text.parse text
+
+                        Expect.isError actual "Should be an invalid text."
+                        Expect.equal actual expected "Should be an invalid text."
+
+                    testCase "parse should return a valid chapter when not empty or null"
+                    <| fun () ->
+                        let text = "not empty ;)"
+
+                        let actual = Bible.Text.parse text
+
+                        Expect.isOk actual "Should be an valid text."
+                ]
+            testList
+                "Bible.VerseNumber"
+                [
+                    testCase "parse should return an error if below minimum"
+                    <| fun () ->
+                        let verse_number = Bible.VerseNumber.min - 1
                         let expected = verse_number |> Bible.InvalidVerseNumber |> Error
 
-                        let actual = Bible.VerseNumber.create verse_number
+                        let actual = Bible.VerseNumber.parse verse_number
 
                         Expect.isError actual "Should be an invalid verse number."
                         Expect.equal actual expected "Should be an invalid verse number."
 
-                    testCase "create should return an error if above the maximum"
+                    testCase "parse should return an error if above the maximum"
                     <| fun () ->
-                        let verse_number = Bible.VerseNumber.max_verse_number + 1
+                        let verse_number = Bible.VerseNumber.max + 1
                         let expected = verse_number |> Bible.InvalidVerseNumber |> Error
 
-                        let actual = Bible.VerseNumber.create verse_number
+                        let actual = Bible.VerseNumber.parse verse_number
 
                         Expect.isError actual "Should be an invalid verse number."
                         Expect.equal actual expected "Should be an invalid verse number."
 
-                    testCase "create should return a valid chapter when between or equal to min or max"
+                    testCase "parse should return a valid chapter when between or equal to min or max"
                     <| fun () ->
-                        let verse_numbers =
-                            [ Bible.VerseNumber.min_verse_number ; Bible.VerseNumber.min_verse_number ; 26 ]
+                        let verse_numbers = [ Bible.VerseNumber.min ; Bible.VerseNumber.min ; 26 ]
 
-                        let actual = verse_numbers |> List.map Bible.VerseNumber.create
+                        let actual = verse_numbers |> List.map Bible.VerseNumber.parse
 
                         Expect.all actual Result.isOk "Valid verse numbers should return ok"
                 ]

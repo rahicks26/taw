@@ -1,6 +1,7 @@
 ﻿module Taw.Core.Bible.SimpleTypes
 
 open System
+open FsToolkit.ErrorHandling
 
 [<RequireQualifiedAccess>]
 module Bible =
@@ -8,20 +9,15 @@ module Bible =
     type Error =
         | InvalidBook of string
         | InvalidChapter of int
+        | InvalidText of string
         | InvalidVerseNumber of int
 
     [<Struct>]
-    type Book = private | Book of string
+    type Book =
+        private
+        | Book of string
 
-    [<Struct>]
-    type Chapter = private | Chapter of int
-
-    [<Struct>]
-    type VerseNumber = private | VerseNumber of int
-
-    [<RequireQualifiedAccess>]
-    module Book =
-        let all_books =
+        static member canonical_books =
             set
                 [
                     "genesis"
@@ -65,52 +61,57 @@ module Bible =
                     "malach"
                 ]
 
-        let (|IsValidBookName|_|) str =
-            let bookWasFound s = all_books |> Set.contains s
+        static member parse str =
+            let bookWasFound s = Book.canonical_books |> Set.contains s
 
             str
             |> Option.ofObj
             |> Option.filter (String.IsNullOrWhiteSpace >> not)
             |> Option.map (fun str -> str.ToLower ())
             |> Option.filter bookWasFound
+            |> Result.requireSomeWith (fun () -> str |> InvalidBook)
+            |> Result.map Book
 
-        let create =
-            function
-            | IsValidBookName str -> str |> Book |> Ok
-            | str -> str |> InvalidBook |> Error
+        static member value (Book str) = str
 
-        let value (Book str) = str
+    [<Struct>]
+    type Chapter =
+        private
+        | Chapter of int
 
-    [<RequireQualifiedAccess>]
-    module Chapter =
-        let max_chapter = 150
-        let min_chapter = 0
+        static member max = 150
+        static member min = 0
 
-        let (|IsValidChapter|_|) num =
-            if min_chapter <= num && num <= max_chapter then
-                Some num
+        static member parse num =
+            if Chapter.min <= num && num <= Chapter.max then
+                num |> Chapter |> Ok
             else
-                None
+                num |> InvalidChapter |> Error
 
-        let create =
-            function
-            | IsValidChapter num -> num |> Chapter |> Ok
-            | num -> num |> InvalidChapter |> Error
+        static member value (Chapter num) = num
 
-        let value (Chapter num) = num
+    [<Struct>]
+    type Text =
+        private
+        | Text of string
 
-    [<RequireQualifiedAccess>]
-    module VerseNumber =
-        let max_verse_number = 176
-        let min_verse_number = 1
+        static member parse str =
+            match str with
+            | str when String.IsNullOrWhiteSpace str -> str |> InvalidText |> Error
+            | str -> str |> Text |> Ok
 
-        let (|IsValidVerseNumber|_|) num =
-            if min_verse_number <= num && num <= max_verse_number then
-                Some num
+        static member value (Text str) = str
+
+    [<Struct>]
+    type VerseNumber =
+        private
+        | VerseNumber of int
+
+        static member max = 176
+        static member min = 1
+
+        static member parse num =
+            if VerseNumber.min <= num && num <= VerseNumber.max then
+                num |> VerseNumber |> Ok
             else
-                None
-
-        let create =
-            function
-            | IsValidVerseNumber num -> num |> VerseNumber |> Ok
-            | num -> num |> InvalidVerseNumber |> Error
+                num |> InvalidVerseNumber |> Error
